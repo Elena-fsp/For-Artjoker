@@ -60,7 +60,7 @@ function calcAmountDigits(numberImput) {
     do {
         numberImput /= 10;
         counter++;
-    } while (numberImput >= 1);
+    } while (numberImput > 0);
   
     return counter;
 }
@@ -82,8 +82,8 @@ function checkIsPalindrome (inputString) {
         if(inputString[indexStart] !== inputString[indexEnd]) {
             return false;
         }
-        indexStart ++;
-        indexEnd --;
+        indexStart++;
+        indexEnd--;
     }
 
     return true;
@@ -171,9 +171,6 @@ function Trigon(sideA, sideB, hypotenuse) {
     if(sideA <= 0 || sideB <= 0 || hypotenuse <= 0) {
         throw new Error ("Arguments are not correct");
     }
-    if(!new.target) {
-        return new Trigon(sideA, sideB, hypotenuse);
-    }
     
     this.sideA = sideA;
     this.sideB = sideB;
@@ -231,9 +228,6 @@ function Rectangle(width, height) {
     if(width <= 0 || height <= 0) {
         throw new Error ("Arguments are not correct");
     }
-    if(!new.target) {
-        return new Rectangle(width, height);
-    }
     
     this.width = width;
     this.height = height;
@@ -278,9 +272,6 @@ function Circle(radius) {
     }
     if(radius <= 0) {
         throw new Error ("Arguments are not correct");
-    }
-    if(!new.target) {
-        return new Circle(radius);
     }
     
     this.radius = radius;
@@ -602,7 +593,7 @@ function showTransportedMatrix(matrixInput) {
     
     let transportedMatrix = [];
     
-    for(let i = 0; i < matrixInput[0].length; i++) {
+    for(let i = 0; i < matrixInput[i].length; i++) {
         transportedMatrix[i] = [];
         for(let j = 0; j < matrixInput.length; j++) {
             transportedMatrix[i][j] = matrixInput[j][i];
@@ -954,18 +945,17 @@ function calcAmountBits(numberInput) {
     }
     
     let typesBit = {
-        bitZero: 0,
+        bitZero: 32,
         bitOne: 0
     }
     
     for(let i = 0; i < 32; i++) {
-        if((numberInput & 1 << i) !== 1 << i) {
-            ++typesBit.bitZero;
-        } else {
-            ++typesBit.bitOne;
-        }
-    }
-    return typesBit;
+		if((numberInput & 1 << i) == 1 << i) {
+			--typesBit.bitZero;
+			++typesBit.bitOne;
+		}
+	}
+	return typesBit;
 }
 
 function reversesBit(inputNumber) {
