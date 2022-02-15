@@ -46,8 +46,8 @@ Array.prototype.myMap = function(callback) {
   
   let newArray = [];
   
-  for(let item of this) {
-    newArray.push(callback(item));
+  for(let index = 0; index < this.length; index++) {
+    newArray.push(callback(this[index], index, this));
   }
   return newArray;
 }
@@ -59,23 +59,23 @@ Array.prototype.myFilter = function(callback) {
   
   let newArray = [];
   
-  for(let item of this) {
-    if(callback(item)) {
-      newArray.push(item);
+  for(let index = 0; index < this.length; index++) {
+    if(callback(this[index], index, this)) {
+      newArray.push(this[index]);
     }
   }
   return newArray;
 }
 
-Array.prototype.myReduce = function(callback, initialValue){
-  if(typeof callback !== 'function' || typeof initialValue !== 'number' ) {
+Array.prototype.myReduce = function(callback, accumulator){
+  if(typeof callback !== 'function') {
     throw new Error ("Argument are not correct");
   }
   
-  for(let i = 0; i < this.length; i++) {
-    initialValue = callback(initialValue);
+  for (let i = 0;i < this.length; i++) {
+    accumulator =+callback(accumulator, this[i])
   }
-  return initialValue;
+  return accumulator;
 }
 
 Array.prototype.myFind = function(callback){
@@ -85,9 +85,9 @@ Array.prototype.myFind = function(callback){
   
   let result;
   
-  for(let item of this) {
-    if(callback(item)) {
-      result = (item);
+  for(let index = 0; index < this.length; index++) {
+    if(callback(this[index], index, this)) {
+      result = (this[index]);
       break;
     }
   }
@@ -99,12 +99,7 @@ Array.prototype.myForEach = function(callback){
     throw new Error ("Argument is not function");
   }
   
-  for(let item of this) {
-    callback(item);
+  for(let index = 0; index < this.length; index++) {
+    callback(this[index], index, this);
   }
 }
-
-
-
-
-
