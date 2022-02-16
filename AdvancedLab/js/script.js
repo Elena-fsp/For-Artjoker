@@ -4,17 +4,17 @@
 Новая реализация должна по функционалу работать аналогично как и соответствующие стандартные функции.
 Без использования стандартных функций.*/
 
-Function.prototype.myBind = function(contextObject, ...arg) {
+Function.prototype.myBind = function(contextObject, ...arguments) {
   if(typeof contextObject !== 'object') {
     throw new Error ("Arguments are not object");
   }
   
-  let func = this;
+  let contextFunction = this;
   
-  return function (...args) {
+  return function(...arguments) {
     let symbol = Symbol();
-    contextObject[symbol] = func;
-    let result = contextObject[symbol](...args);
+    contextObject[symbol] = contextFunction;
+    let result = contextObject[symbol](...rest.concat(arguments));
     delete contextObject[symbol];
     
     return result;
@@ -26,14 +26,12 @@ Function.prototype.myCall = function(contextObject, ...args){
     throw new Error ("Arguments are not object");
   }
   
-  let func = this;
   let symbol = Symbol();
-  contextObject[symbol] = func;
+  contextObject[symbol] = this;
   let result = contextObject[symbol](...args);
   delete contextObject[symbol];
   return result;
 }
-
 
 /*2. Написать свою реализацию функций для работы с массивами,
  которые являются аналогами следующих функций: map, filter, reduce, find, forEach.
@@ -44,12 +42,12 @@ Array.prototype.myMap = function(callback) {
     throw new Error ("Argument is not function");
   }
   
-  let newArray = [];
+  let modifiedElements = [];
   
   for(let index = 0; index < this.length; index++) {
-    newArray.push(callback(this[index], index, this));
+    modifiedElements.push(callback(this[index], index, this));
   }
-  return newArray;
+  return modifiedElements;
 }
 
 Array.prototype.myFilter = function(callback) {
@@ -57,14 +55,14 @@ Array.prototype.myFilter = function(callback) {
     throw new Error ("Argument is not function");
   }
   
-  let newArray = [];
+  let filteredItems= [];
   
   for(let index = 0; index < this.length; index++) {
     if(callback(this[index], index, this)) {
-      newArray.push(this[index]);
+      filteredItems.push(this[index]);
     }
   }
-  return newArray;
+  return filteredItems;
 }
 
 Array.prototype.myReduce = function(callback, accumulator){
@@ -72,9 +70,10 @@ Array.prototype.myReduce = function(callback, accumulator){
     throw new Error ("Argument are not correct");
   }
   
-  for (let i = 0;i < this.length; i++) {
-    accumulator =+callback(accumulator, this[i])
+  for(let i = 0; i < this.length; i++) {
+    accumulator =+ callback(accumulator, this[i]);
   }
+
   return accumulator;
 }
 
@@ -83,15 +82,12 @@ Array.prototype.myFind = function(callback){
     throw new Error ("Argument is not function");
   }
   
-  let result;
-  
   for(let index = 0; index < this.length; index++) {
     if(callback(this[index], index, this)) {
-      result = (this[index]);
+      return this[index];
       break;
     }
   }
-  return result;
 }
 
 Array.prototype.myForEach = function(callback){
