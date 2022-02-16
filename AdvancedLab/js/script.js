@@ -4,8 +4,8 @@
 Новая реализация должна по функционалу работать аналогично как и соответствующие стандартные функции.
 Без использования стандартных функций.*/
 
-Function.prototype.myBind = function(contextObject, ...arguments) {
-  if(typeof contextObject !== 'object') {
+Function.prototype.myBind = function(context, ...arguments) {
+  if(typeof context !== 'object') {
     throw new Error ("Arguments are not object");
   }
   
@@ -13,9 +13,9 @@ Function.prototype.myBind = function(contextObject, ...arguments) {
   
   return function(...arguments) {
     let symbol = Symbol();
-    contextObject[symbol] = contextFunction;
-    let result = contextObject[symbol](...rest.concat(arguments));
-    delete contextObject[symbol];
+    context[symbol] = contextFunction;
+    let result = context[symbol](...rest.concat(arguments));
+    delete context[symbol];
     
     return result;
   };
@@ -65,15 +65,21 @@ Array.prototype.myFilter = function(callback) {
   return filteredItems;
 }
 
-Array.prototype.myReduce = function(callback, accumulator){
+Array.prototype.myReduce = function(callback, accumulator, initialValue){
   if(typeof callback !== 'function') {
     throw new Error ("Argument are not correct");
   }
+  if(initialValue !== undefined) {
+    accumulator = initialValue;
+  }
   
   for(let i = 0; i < this.length; i++) {
-    accumulator =+ callback(accumulator, this[i]);
+    if(accumulator !== undefined) {
+      accumulator = callback(accumulator, this[i], i, this);
+    } else {
+      accumulator = this[i];
+    }
   }
-
   return accumulator;
 }
 
@@ -85,7 +91,6 @@ Array.prototype.myFind = function(callback){
   for(let index = 0; index < this.length; index++) {
     if(callback(this[index], index, this)) {
       return this[index];
-      break;
     }
   }
 }
