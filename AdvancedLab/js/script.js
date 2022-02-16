@@ -55,7 +55,7 @@ Array.prototype.myFilter = function(callback) {
     throw new Error ("Argument is not function");
   }
   
-  let filteredItems= [];
+  let filteredItems = [];
   
   for(let index = 0; index < this.length; index++) {
     if(callback(this[index], index, this)) {
