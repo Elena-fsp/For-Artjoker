@@ -56,7 +56,7 @@ class BinaryTreeSeach {
     this.left = null;
   }
   
-  insertTop(value, top) {
+  insert(value, top) {
     top = top || this;
     if(top.value === null) {
       top.value = value;
@@ -66,54 +66,53 @@ class BinaryTreeSeach {
       if(top.left === null) {
         top.left = new BinaryTreeSeach();
       }
-      return this.insertTop(value, top.left);
+      return this.insert(value, top.left);
     } else {
       if(top.right === null) {
         top.right = new BinaryTreeSeach();
       }
-      return this.insertTop(value, top.right);
+      return this.insert(value, top.right);
     }
   }
   
-  searchTop(value, top) {
+  search(value, top) {
     top = top || this;
     if(value < top.value) {
       if(top.left === null) {
         return false;
       }
-      return this.searchTop(value, top.left);
+      return this.search(value, top.left);
     }
     if(value > top.value) {
       if(top.right === null) {
         return false;
       }
-      return this.searchTop(value, top.right);
-    } else {
-      return true;
+      return this.search(value, top.right);
     }
+    return true;
   }
   
-  seachMinTop(top) {
+  seachMin(top) {
     top = top || this;
     if(top.left === null) {
       return top;
     }
-    return this.seachMinTop(top.left);
+    return this.seachMin(top.left);
   }
   
-  removeTop(value, top) {
+  remove(value, top) {
     top = top || this; 
     if(value < top.value) {
       if(top.left === null) {
         return false;
       }
-      top.left = this.removeTop(value, top.left);
+      top.left = this.remove(value, top.left);
       return top;
     } else if(value > top.value) {
       if(top.right === null) {
         return false;
       }
-      top.right = this.removeTop(value, top.right);
+      top.right = this.remove(value, top.right);
       return top;
     } else {
       top = top || this;
@@ -127,9 +126,9 @@ class BinaryTreeSeach {
         top = top.left;
         return top;
       } else {
-        let minTop = this.seachMinTop(top.right);
+        let minTop = this.seachMin(top.right);
         top.value = minElement.value;
-        top.right = this.removeTop(minTop.value, top.right);
+        top.right = this.remove(minTop.value, top.right);
         return top;
       }
     }
